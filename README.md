@@ -1,7 +1,5 @@
 # To-do list:
-    funkční js
-    lepší rozložení karet
-    přiblížení po úspěšném matchi
+    funkční js (kinda)
     více hráčů a interface
 
     basic ai pro režim 1 hráče

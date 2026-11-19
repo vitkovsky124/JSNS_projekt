@@ -43,7 +43,7 @@ h1 { margin: 0; font-size: clamp(29px, 4vw, 42px); line-height: 1.1; letter-spac
 .card:hover:not(.is-open):not(.is-matched) .card-inner { transform: translateY(-2px); box-shadow: 0 5px 12px #342d1c15; }
 .card.is-open .card-inner, .card.is-matched .card-inner { transform: rotateY(180deg); }
 .card-face { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; border-radius: inherit; backface-visibility: hidden; }
-.card-back { background: url("images/pozadi.png") center / cover no-repeat; }
+.card-back { background: url("pozadi_big.png") center / cover no-repeat; }
 .card-back::after { content: none; }
 .card-front { transform: rotateY(180deg); padding: 5px; background: #fffefa; }
 .card-front img { display: block; width: 100%; height: 100%; border-radius: 5px; object-fit: contain; }
@@ -55,6 +55,51 @@ h1 { margin: 0; font-size: clamp(29px, 4vw, 42px); line-height: 1.1; letter-spac
 .win-message[hidden] { display: none; }
 .win-sparkle { color: #c28b36; font-size: 20px; }
 .win-message button { margin-left: auto; border: 0; background: none; color: var(--green-dark); font: inherit; font-size: 12px; font-weight: 800; cursor: pointer; }
+.pair-spotlight {
+  position: fixed;
+  z-index: 10;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: #17231edb;
+}
+.pair-spotlight[hidden] { display: none; }
+.pair-spotlight-panel {
+  width: min(900px, 100%);
+  padding: clamp(20px, 5vw, 42px);
+  border-radius: 20px;
+  background: var(--paper);
+  box-shadow: 0 20px 70px #0005;
+  text-align: center;
+  animation: spotlight-appear .35s cubic-bezier(.2,.75,.25,1) both;
+}
+.pair-spotlight-panel h2 { margin: 0 0 24px; color: var(--green-dark); font-size: clamp(24px, 4vw, 36px); }
+.spotlight-cards { display: flex; justify-content: center; gap: clamp(12px, 4vw, 32px); }
+.spotlight-cards img {
+  width: min(38vw, 340px);
+  max-height: 58vh;
+  object-fit: contain;
+  border: 8px solid #fffefa;
+  border-radius: 14px;
+  box-shadow: 0 8px 26px #342d1c24;
+}
+.continue-button {
+  margin-top: 26px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 9px;
+  color: white;
+  background: var(--green);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.continue-button:hover { background: var(--green-dark); }
+@keyframes spotlight-appear {
+  from { opacity: 0; transform: scale(.88) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
 footer { padding: 21px 0 25px; color: #999b93; font-size: 11px; text-align: center; }
 footer span { color: #c47d70; }
 @media (max-width: 1050px) {
@@ -82,7 +127,7 @@ footer span { color: #c47d70; }
 
 
 
-/* Keep the complete deck in view and size cards to the available viewport. */
+/* Keep the complete deck in five rows of six cards. */
 .game {
   width: min(1800px, calc(100% - 32px));
 }
@@ -93,10 +138,11 @@ h1 { font-size: clamp(25px, 3vw, 36px); }
 .toolbar { min-height: 54px; }
 .board-wrap { padding: 12px 18px; }
 .board {
-  --columns: 12;
+  --columns: 6;
+  --rows: 5;
   --card-size: min(
     calc((100vw - 100px) / var(--columns)),
-    calc((100dvh - 340px) / 6)
+    calc((100dvh - 340px) / var(--rows))
   );
   grid-template-columns: repeat(var(--columns), var(--card-size));
   grid-auto-rows: var(--card-size);
@@ -110,10 +156,11 @@ footer { padding: 8px 0 10px; }
 @media (max-width: 1050px) {
   .game { width: calc(100% - 24px); }
   .board {
-    --columns: 8;
+    --columns: 6;
+    --rows: 5;
     --card-size: min(
       calc((100vw - 80px) / var(--columns)),
-      calc((100dvh - 320px) / 8)
+      calc((100dvh - 320px) / var(--rows))
     );
   }
 }
@@ -124,9 +171,10 @@ footer { padding: 8px 0 10px; }
   .board-wrap { padding: 8px 4px; }
   .board {
     --columns: 6;
+    --rows: 5;
     --card-size: min(
       calc((100vw - 48px) / var(--columns)),
-      calc((100dvh - 270px) / 11)
+      calc((100dvh - 270px) / var(--rows))
     );
   }
   .hint { padding-bottom: 5px; }
@@ -135,10 +183,11 @@ footer { padding: 8px 0 10px; }
 @media (max-width: 480px) {
   .top-note { font-size: 10px; }
   .board {
-    --columns: 5;
+    --columns: 6;
+    --rows: 5;
     --card-size: min(
       calc((100vw - 34px) / var(--columns)),
-      calc((100dvh - 270px) / 13)
+      calc((100dvh - 270px) / var(--rows))
     );
   }
 }
