@@ -43,8 +43,8 @@ h1 { margin: 0; font-size: clamp(29px, 4vw, 42px); line-height: 1.1; letter-spac
 .card:hover:not(.is-open):not(.is-matched) .card-inner { transform: translateY(-2px); box-shadow: 0 5px 12px #342d1c15; }
 .card.is-open .card-inner, .card.is-matched .card-inner { transform: rotateY(180deg); }
 .card-face { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; border-radius: inherit; backface-visibility: hidden; }
-.card-back { color: #75937c; background-color: #eaf0e8; background-image: radial-gradient(#9ab09b 1px, transparent 1px), radial-gradient(#9ab09b 1px, transparent 1px); background-position: 0 0, 7px 7px; background-size: 14px 14px; }
-.card-back::after { content: "✳"; display: grid; place-items: center; width: 37%; aspect-ratio: 1; border: 1px solid #c8d8c9; border-radius: 50%; background: #edf3eb; color: var(--green); font-size: clamp(12px, 2vw, 22px); }
+.card-back { background: url("images/pozadi.png") center / cover no-repeat; }
+.card-back::after { content: none; }
 .card-front { transform: rotateY(180deg); padding: 5px; background: #fffefa; }
 .card-front img { display: block; width: 100%; height: 100%; border-radius: 5px; object-fit: contain; }
 .card.is-matched { cursor: default; }
@@ -74,3 +74,4 @@ footer span { color: #c47d70; }
   .hint { font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+

@@ -1,6 +1,5 @@
 # To-do list:
     funkční js
-    pozadí karet
     lepší rozložení karet
     přiblížení po úspěšném matchi
     více hráčů a interface
