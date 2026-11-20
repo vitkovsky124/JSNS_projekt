@@ -27,12 +27,92 @@
   const pairSpotlight = document.querySelector("#pairSpotlight");
   const spotlightCards = document.querySelector("#spotlightCards");
   const continueButton = document.querySelector("#continueGame");
+  const turnStatus = document.querySelector("#turnStatus");
+  const playerScores = document.querySelector("#playerScores");
+  const winResult = document.querySelector("#winResult");
+  const returnHomeLink = document.querySelector(".return-home");
+  const debugButton = document.querySelector("#debugPlay");
+  const requestedPlayers = Number(new URLSearchParams(window.location.search).get("players"));
+  const playerCount = Number.isInteger(requestedPlayers) && requestedPlayers >= 1 && requestedPlayers <= 4
+    ? requestedPlayers
+    : 1;
 
   let firstCard = null;
   let lockBoard = false;
   let moves = 0;
   let matchedPairs = 0;
+  let currentPlayer = 0;
+  let scores = [];
   let mismatchTimer;
+  let debugTimer;
+  let debugRunning = false;
+
+  function updatePlayers() {
+    turnStatus.textContent = matchedPairs === imageFiles.length / 2
+      ? "Všechny karty jsou otočené. Hra skončila!"
+      : `Na tahu je hráč ${currentPlayer + 1}`;
+    playerScores.replaceChildren(...scores.map((score, index) => {
+      const item = document.createElement("div");
+      item.className = `player-score${index === currentPlayer && matchedPairs < imageFiles.length / 2 ? " is-current" : ""}`;
+      item.setAttribute("aria-current", index === currentPlayer && matchedPairs < imageFiles.length / 2 ? "true" : "false");
+      item.innerHTML = `<span>Hráč ${index + 1}</span><strong>${score}</strong><span class="score-label">${score === 1 ? "pár" : "párů"}</span>`;
+      return item;
+    }));
+  }
+
+  function finishGame() {
+    stopDebug();
+    const bestScore = Math.max(...scores);
+    const winners = scores
+      .map((score, index) => score === bestScore ? `hráč ${index + 1}` : null)
+      .filter(Boolean);
+    winResult.textContent = `${winners.length > 1 ? "Remíza:" : "Vyhrává"} ${winners.join(" a ")} s nejvyšším počtem nalezených párů (${bestScore}).`;
+    winMessage.hidden = false;
+    updatePlayers();
+    returnHomeLink.focus();
+  }
+
+  function stopDebug() {
+    debugRunning = false;
+    window.clearTimeout(debugTimer);
+    debugButton.textContent = "Debug start";
+    debugButton.setAttribute("aria-pressed", "false");
+  }
+
+  function debugStep() {
+    if (!debugRunning || matchedPairs === imageFiles.length / 2) return;
+
+    if (!pairSpotlight.hidden) {
+      continueGame();
+      debugTimer = window.setTimeout(debugStep, 250);
+      return;
+    }
+    if (lockBoard) {
+      debugTimer = window.setTimeout(debugStep, 100);
+      return;
+    }
+
+    const availableCards = [...board.querySelectorAll(".card:not(.is-open):not(.is-matched)")];
+    if (availableCards.length === 0) {
+      stopDebug();
+      return;
+    }
+
+    const nextCard = availableCards[Math.floor(Math.random() * availableCards.length)];
+    nextCard.click();
+    debugTimer = window.setTimeout(debugStep, 300);
+  }
+
+  function toggleDebug() {
+    if (debugRunning) {
+      stopDebug();
+      return;
+    }
+    debugRunning = true;
+    debugButton.textContent = "Debug stop";
+    debugButton.setAttribute("aria-pressed", "true");
+    debugStep();
+  }
 
   function namePrefix(file) {
     return file.replace(/\.[^.]+$/, "").replace(/[^a-z]/gi, "").slice(0, 3).toLowerCase();
@@ -83,10 +163,13 @@
       previous.element.setAttribute("aria-label", `Picture ${previous.item.file}, matched`);
       card.setAttribute("aria-label", `Picture ${item.file}, matched`);
       matchedPairs += 1;
+      scores[currentPlayer] += 1;
       pairsDisplay.textContent = matchedPairs;
-      showPair(previous.item, item);
+      updatePlayers();
       if (matchedPairs * 2 === imageFiles.length) {
-        winMessage.hidden = false;
+        finishGame();
+      } else {
+        showPair(previous.item, item);
       }
       return;
     }
@@ -98,6 +181,8 @@
         missedCard.element.setAttribute("aria-label", "Face-down card");
       }
       lockBoard = false;
+      currentPlayer = (currentPlayer + 1) % playerCount;
+      updatePlayers();
     }, 850);
   }
 
@@ -124,15 +209,21 @@
     lockBoard = false;
     moves = 0;
     matchedPairs = 0;
+    scores = Array(playerCount).fill(0);
+    currentPlayer = Math.floor(Math.random() * playerCount);
     movesDisplay.textContent = "0";
     pairsDisplay.textContent = "0";
     totalDisplay.textContent = ` / ${imageFiles.length / 2}`;
     winMessage.hidden = true;
     pairSpotlight.hidden = true;
+    updatePlayers();
     board.replaceChildren(...shuffledImages().map(createCard));
   }
 
-  restartButton.addEventListener("click", newGame);
+  restartButton.addEventListener("click", () => {
+    window.location.href = "uvodni_stranka.html";
+  });
+  debugButton.addEventListener("click", toggleDebug);
   continueButton.addEventListener("click", continueGame);
   newGame();
 })();

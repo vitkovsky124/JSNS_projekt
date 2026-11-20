@@ -1,17 +1,17 @@
 ﻿<!doctype html>
-<html lang="en">
+<html lang="cs">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f8f5ef">
-  <title>Picture Pexeso</title>
+  <title>Obrázkové pexeso</title>
   <link rel="stylesheet" href="pexeso.css">
 </head>
 <body>
   <main class="game">
 
     <section class="intro" aria-labelledby="title">
-      <h1 id="title">Nadpis placeholder</h1>
+      <h1 id="title">placeholder nadpis</h1>
     </section>
 
     <section class="game-panel" aria-label="Memory card game">
@@ -21,8 +21,16 @@
           <span class="stat-divider" aria-hidden="true"></span>
           <div class="stat"><span class="stat-label">NALEZENÉ PÁRY</span><strong><span id="pairs">0</span><span class="stat-total"></span></strong></div>
         </div>
-        <button class="restart" id="restart" type="button"><span aria-hidden="true">↻</span> Nová hra</button>
+        <div class="toolbar-actions">
+          <button class="debug-button" id="debugPlay" type="button">Debug start</button>
+          <button class="restart" id="restart" type="button"><span aria-hidden="true">↻</span> Nová hra</button>
+        </div>
       </div>
+
+      <section class="player-panel" aria-label="Stav hráčů">
+        <p class="turn-status" id="turnStatus" aria-live="polite"></p>
+        <div class="player-scores" id="playerScores" aria-label="Počet nalezených párů hráčů"></div>
+      </section>
 
       <div class="board-wrap">
         <div class="board" id="board" aria-label="30 shuffled picture cards"></div>
@@ -34,9 +42,12 @@
           <button class="continue-button" id="continueGame" type="button">Pokračovat ve hře</button>
         </div>
       </section>
-      <div class="win-message" id="winMessage" role="status" hidden>
-        <span class="win-sparkle" aria-hidden="true">✦</span>
-        <strong>Gratulujeme!</strong> Našel/našla jsi všechny páry.
+      <div class="win-message" id="winMessage" role="dialog" aria-modal="true" aria-labelledby="winTitle" hidden>
+        <div class="win-panel">
+          <h2 id="winTitle">Hra skončila!</h2>
+          <p class="win-result" id="winResult"></p>
+          <a class="return-home" href="uvodni_stranka.html">Nová hra</a>
+        </div>
       </div>
     </section>
   </main>

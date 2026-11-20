@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f5ef">
+  <meta name="description" content="Vyber počet hráčů a zahraj si obrázkové pexeso.">
+  <title>Obrázkové pexeso</title>
+  <link rel="stylesheet" href="uvodni_stranka.css">
+</head>
+<body>
+  <main class="page">
+    <section class="start-panel" aria-labelledby="title">
+      <div class="brand-mark" aria-hidden="true">✿</div>
+      <p class="eyebrow">OBRÁZKOVÉ PEXESO</p>
+      <h1 id="title">Pojďme si zahrát!</h1>
+      <p class="description">Vyber počet hráčů a připrav se hledat stejné dvojice.</p>
+
+      <fieldset class="player-picker">
+        <legend>Kolik vás bude hrát?</legend>
+        <div class="player-options">
+          <label class="player-option">
+            <input type="radio" name="players" value="1" checked>
+            <span class="option-card"><span class="player-number">1</span><span class="player-label">hráč</span></span>
+          </label>
+          <label class="player-option">
+            <input type="radio" name="players" value="2">
+            <span class="option-card"><span class="player-number">2</span><span class="player-label">hráči</span></span>
+          </label>
+          <label class="player-option">
+            <input type="radio" name="players" value="3">
+            <span class="option-card"><span class="player-number">3</span><span class="player-label">hráči</span></span>
+          </label>
+          <label class="player-option">
+            <input type="radio" name="players" value="4">
+            <span class="option-card"><span class="player-number">4</span><span class="player-label">hráči</span></span>
+          </label>
+        </div>
+      </fieldset>
+
+      <a class="start-button" id="startGame" href="pexeso.html?players=1">Začít hrát <span aria-hidden="true">→</span></a>
+      <p class="small-note"><span aria-hidden="true">✦</span> 30 karet · 15 dvojic</p>
+    </section>
+  </main>
+  <script src="uvodni_stranka.js"></script>
+</body>
+</html>
