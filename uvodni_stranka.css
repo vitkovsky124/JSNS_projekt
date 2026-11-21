@@ -14,7 +14,7 @@ body {
   min-height: 100vh;
   color: var(--ink);
   background: var(--paper);
-  font-family: "Merriweather", serif;
+  font-family: "Merriweather Sans", sans-serif;
 }
 .page {
   display: grid;
@@ -50,7 +50,7 @@ h1 { margin: 0; font-size: clamp(32px, 7vw, 48px); line-height: 1.08; letter-spa
 .difficulty-picker { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 14px; margin: 18px auto 0; color: var(--ink); font-size: 13px; font-weight: 700; text-align: left; }
 .difficulty-picker[hidden] { display: none; }
 .difficulty-picker select { min-width: 145px; padding: 10px 32px 10px 12px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: #fffefa; font: inherit; font-weight: 500; cursor: pointer; }
-.difficulty-picker select:focus-visible { outline: 3px solid #74a782; outline-offset: 3px; }
+.difficulty-picker select:focus-visible { outline: 3px solid; outline-offset: 3px; }
 .player-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .player-option { position: relative; cursor: pointer; }
 .player-option input { position: absolute; width: 1px; height: 1px; opacity: 0; }
