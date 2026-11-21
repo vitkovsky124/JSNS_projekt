@@ -1,6 +1,8 @@
 const startLink = document.querySelector("#startGame");
 const playerChoices = document.querySelectorAll('input[name="players"]');
 const playerNames = document.querySelector("#playerNames");
+const difficultyPicker = document.querySelector("#difficultyPicker");
+const difficultyChoice = document.querySelector("#botDifficulty");
 const setupParams = new URLSearchParams(window.location.search);
 const requestedPlayers = Number(setupParams.get("players"));
 let pendingNames = setupParams.getAll("name");
@@ -14,8 +16,14 @@ function updateStartLink() {
   const selectedPlayers = Number(document.querySelector('input[name="players"]:checked')?.value || 1);
   const params = new URLSearchParams({ players: String(selectedPlayers) });
   playerNames.querySelectorAll("input").forEach((input) => params.append("name", input.value.trim()));
+  difficultyPicker.hidden = selectedPlayers !== 1;
+  params.set("difficulty", difficultyChoice.value);
   startLink.href = `pexeso.html?${params.toString()}`;
 }
+
+const requestedDifficulty = setupParams.get("difficulty");
+if (["easy", "medium", "hard"].includes(requestedDifficulty)) difficultyChoice.value = requestedDifficulty;
+difficultyChoice.addEventListener("change", updateStartLink);
 
 function renderPlayerNames() {
   const selectedPlayers = Number(document.querySelector('input[name="players"]:checked')?.value || 1);
