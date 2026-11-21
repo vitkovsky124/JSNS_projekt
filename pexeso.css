@@ -29,9 +29,6 @@ h1 { margin: 0; font-size: clamp(29px, 4vw, 42px); line-height: 1.1; letter-spac
 .game-panel { overflow: hidden; border: 1px solid var(--line); border-radius: 19px; background: #fffdfa; box-shadow: 0 10px 32px #473c2810; }
 .toolbar { min-height: 70px; padding: 0 21px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .toolbar-actions { display: flex; align-items: center; gap: 8px; }
-.debug-button { padding: 9px 12px; border: 1px solid #e7dcc7; border-radius: 9px; color: #80663c; background: #fbf6eb; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; transition: background .15s, transform .15s; }
-.debug-button:hover { transform: translateY(-1px); background: #f4ecd9; }
-.debug-button[aria-pressed="true"] { border-color: #d8b7a8; color: #8a5141; background: #fbefeb; }
 .player-panel { padding: 14px 20px 13px; border-bottom: 1px solid var(--line); background: #fbfaf6; text-align: center; }
 .turn-status { margin: 0 0 10px; color: var(--green-dark); font-size: 14px; font-weight: 800; }
 .player-scores { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
@@ -138,7 +135,6 @@ footer span { color: #c47d70; }
   .subtitle { font-size: 13px; }
   .toolbar { min-height: 62px; padding: 0 13px; }
   .toolbar-actions { gap: 5px; }
-  .debug-button { padding: 8px 7px; font-size: 10px; }
   .player-panel { padding: 11px 8px; }
   .player-scores { gap: 5px; }
   .player-score { gap: 4px; padding: 6px 7px; font-size: 10px; }
@@ -225,7 +221,6 @@ footer { padding: 8px 0 10px; }
 :root[data-theme="dark"] .spotlight-cards img { border-color: #222; }
 :root[data-theme="dark"] .theme-toggle { color: var(--ink); background: #171717; border-color: #444; }
 :root[data-theme="dark"] .restart { color: #eee; background: #222; border-color: #444; }
-:root[data-theme="dark"] .debug-button { color: #eee; background: #222; border-color: #444; }
 :root[data-theme="dark"] .win-panel h2, :root[data-theme="dark"] .pair-spotlight-panel h2 { color: #f2f2f2; }
 :root[data-theme="dark"] .return-home, :root[data-theme="dark"] .continue-button { color: #111; background: #eee; }
 :root[data-theme="dark"] .card.is-matched .card-inner { border-color: #777; box-shadow: 0 0 0 2px #333; }

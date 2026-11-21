@@ -31,7 +31,6 @@
   const playerScores = document.querySelector("#playerScores");
   const winResult = document.querySelector("#winResult");
   const returnHomeLink = document.querySelector(".return-home");
-  const debugButton = document.querySelector("#debugPlay");
   const requestedPlayers = Number(new URLSearchParams(window.location.search).get("players"));
   const playerCount = Number.isInteger(requestedPlayers) && requestedPlayers >= 1 && requestedPlayers <= 4
     ? requestedPlayers
@@ -53,8 +52,6 @@
   let currentPlayer = 0;
   let scores = [];
   let mismatchTimer;
-  let debugTimer;
-  let debugRunning = false;
   let botTimer;
   const knownCards = new Map();
 
@@ -115,7 +112,6 @@
   }
 
   function finishGame() {
-    stopDebug();
     const bestScore = Math.max(...scores);
     const winners = scores
       .map((score, index) => score === bestScore ? playerName(index) : null)
@@ -124,48 +120,6 @@
     winMessage.hidden = false;
     updatePlayers();
     returnHomeLink.focus();
-  }
-
-  function stopDebug() {
-    debugRunning = false;
-    window.clearTimeout(debugTimer);
-    debugButton.textContent = "Debug start";
-    debugButton.setAttribute("aria-pressed", "false");
-  }
-
-  function debugStep() {
-    if (!debugRunning || matchedPairs === imageFiles.length / 2) return;
-
-    if (!pairSpotlight.hidden) {
-      continueGame();
-      debugTimer = window.setTimeout(debugStep, 250);
-      return;
-    }
-    if (lockBoard) {
-      debugTimer = window.setTimeout(debugStep, 100);
-      return;
-    }
-
-    const availableCards = [...board.querySelectorAll(".card:not(.is-open):not(.is-matched)")];
-    if (availableCards.length === 0) {
-      stopDebug();
-      return;
-    }
-
-    const nextCard = availableCards[Math.floor(Math.random() * availableCards.length)];
-    nextCard.click();
-    debugTimer = window.setTimeout(debugStep, 300);
-  }
-
-  function toggleDebug() {
-    if (debugRunning) {
-      stopDebug();
-      return;
-    }
-    debugRunning = true;
-    debugButton.textContent = "Debug stop";
-    debugButton.setAttribute("aria-pressed", "true");
-    debugStep();
   }
 
   function namePrefix(file) {
@@ -268,7 +222,6 @@
   }
 
   function newGame() {
-    stopDebug();
     window.clearTimeout(mismatchTimer);
     window.clearTimeout(botTimer);
     firstCard = null;
@@ -298,7 +251,6 @@
   restartButton.addEventListener("click", () => {
     window.location.href = setupPageUrl();
   });
-  debugButton.addEventListener("click", toggleDebug);
   continueButton.addEventListener("click", continueGame);
   newGame();
 })();
