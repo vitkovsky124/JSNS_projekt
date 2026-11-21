@@ -40,6 +40,10 @@
   const totalPlayers = hasBot ? 2 : playerCount;
   const requestedDifficulty = new URLSearchParams(window.location.search).get("difficulty");
   const botDifficulty = ["easy", "medium", "hard"].includes(requestedDifficulty) ? requestedDifficulty : "medium";
+  const playerNames = new URLSearchParams(window.location.search).getAll("name")
+    .slice(0, playerCount)
+    .map((name, index) => name.trim().slice(0, 24) || `Hráč ${index + 1}`);
+  while (playerNames.length < playerCount) playerNames.push(`Hráč ${playerNames.length + 1}`);
 
   let firstCard = null;
   let lockBoard = false;
@@ -93,11 +97,20 @@
     turnStatus.textContent = matchedPairs === imageFiles.length / 2
       ? "Všechny karty jsou otočené. Hra skončila!"
       : `Na tahu je ${playerName(currentPlayer)}`;
+      : `Na tahu je ${playerNames[currentPlayer]}`;
     playerScores.replaceChildren(...scores.map((score, index) => {
       const item = document.createElement("div");
       item.className = `player-score${index === currentPlayer && matchedPairs < imageFiles.length / 2 ? " is-current" : ""}`;
       item.setAttribute("aria-current", index === currentPlayer && matchedPairs < imageFiles.length / 2 ? "true" : "false");
       item.innerHTML = `<span>${playerName(index)}</span><strong>${score}</strong><span class="score-label">${score === 1 ? "pár" : "párů"}</span>`;
+      const name = document.createElement("span");
+      name.textContent = playerNames[index];
+      const scoreValue = document.createElement("strong");
+      scoreValue.textContent = score;
+      const label = document.createElement("span");
+      label.className = "score-label";
+      label.textContent = score === 1 ? "pár" : "párů";
+      item.append(name, scoreValue, label);
       return item;
     }));
   }
@@ -107,6 +120,7 @@
     const bestScore = Math.max(...scores);
     const winners = scores
       .map((score, index) => score === bestScore ? playerName(index) : null)
+      .map((score, index) => score === bestScore ? playerNames[index] : null)
       .filter(Boolean);
     winResult.textContent = `${winners.length > 1 ? "Remíza:" : "Vyhrává"} ${winners.join(" a ")} s nejvyšším počtem nalezených párů (${bestScore}).`;
     winMessage.hidden = false;
@@ -256,6 +270,7 @@
   }
 
   function newGame() {
+    stopDebug();
     window.clearTimeout(mismatchTimer);
     window.clearTimeout(botTimer);
     firstCard = null;
@@ -276,7 +291,9 @@
   }
 
   restartButton.addEventListener("click", () => {
-    window.location.href = "uvodni_stranka.html";
+    const params = new URLSearchParams({ players: String(playerCount) });
+    playerNames.forEach((name) => params.append("name", name));
+    window.location.href = `uvodni_stranka.html?${params.toString()}`;
   });
   debugButton.addEventListener("click", toggleDebug);
   continueButton.addEventListener("click", continueGame);
