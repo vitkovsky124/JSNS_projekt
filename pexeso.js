@@ -44,6 +44,7 @@
     .slice(0, playerCount)
     .map((name, index) => name.trim().slice(0, 24) || `Hráč ${index + 1}`);
   while (playerNames.length < playerCount) playerNames.push(`Hráč ${playerNames.length + 1}`);
+  if (hasBot) playerNames.push("Bot");
 
   let firstCard = null;
   let lockBoard = false;
@@ -58,7 +59,7 @@
   const knownCards = new Map();
 
   function playerName(index) {
-    return hasBot && index === 1 ? "Bot" : `Hráč ${index + 1}`;
+    return playerNames[index];
   }
 
   function scheduleBotTurn(delay = 650) {
@@ -97,14 +98,12 @@
     turnStatus.textContent = matchedPairs === imageFiles.length / 2
       ? "Všechny karty jsou otočené. Hra skončila!"
       : `Na tahu je ${playerName(currentPlayer)}`;
-      : `Na tahu je ${playerNames[currentPlayer]}`;
     playerScores.replaceChildren(...scores.map((score, index) => {
       const item = document.createElement("div");
       item.className = `player-score${index === currentPlayer && matchedPairs < imageFiles.length / 2 ? " is-current" : ""}`;
       item.setAttribute("aria-current", index === currentPlayer && matchedPairs < imageFiles.length / 2 ? "true" : "false");
-      item.innerHTML = `<span>${playerName(index)}</span><strong>${score}</strong><span class="score-label">${score === 1 ? "pár" : "párů"}</span>`;
       const name = document.createElement("span");
-      name.textContent = playerNames[index];
+      name.textContent = playerName(index);
       const scoreValue = document.createElement("strong");
       scoreValue.textContent = score;
       const label = document.createElement("span");
@@ -120,7 +119,6 @@
     const bestScore = Math.max(...scores);
     const winners = scores
       .map((score, index) => score === bestScore ? playerName(index) : null)
-      .map((score, index) => score === bestScore ? playerNames[index] : null)
       .filter(Boolean);
     winResult.textContent = `${winners.length > 1 ? "Remíza:" : "Vyhrává"} ${winners.join(" a ")} s nejvyšším počtem nalezených párů (${bestScore}).`;
     winMessage.hidden = false;
@@ -171,7 +169,7 @@
   }
 
   function namePrefix(file) {
-    return file.replace(/\.[^.]+$/, "").replace(/[^a-z]/gi, "").slice(0, 3).toLowerCase();
+    return file.replace(/_(bio|cit)\.png$/i, "").toLowerCase();
   }
 
   function shuffledImages() {
@@ -290,10 +288,15 @@
     updatePlayers();
   }
 
-  restartButton.addEventListener("click", () => {
+  function setupPageUrl() {
     const params = new URLSearchParams({ players: String(playerCount) });
-    playerNames.forEach((name) => params.append("name", name));
-    window.location.href = `uvodni_stranka.html?${params.toString()}`;
+    playerNames.slice(0, playerCount).forEach((name) => params.append("name", name));
+    return `uvodni_stranka.html?${params.toString()}`;
+  }
+
+  returnHomeLink.href = setupPageUrl();
+  restartButton.addEventListener("click", () => {
+    window.location.href = setupPageUrl();
   });
   debugButton.addEventListener("click", toggleDebug);
   continueButton.addEventListener("click", continueGame);
