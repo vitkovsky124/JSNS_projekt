@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="uvodni_stranka.css">
 </head>
 <body>
+  <button class="theme-toggle" type="button" aria-pressed="false">🌙 Tmavý režim</button>
   <main class="page">
     <section class="start-panel" aria-labelledby="title">
       <div class="brand-mark" aria-hidden="true">✿</div>
@@ -38,10 +39,20 @@
         </div>
       </fieldset>
 
-      <a class="start-button" id="startGame" href="pexeso.html?players=1">Začít hrát <span aria-hidden="true">→</span></a>
+      <label class="difficulty-picker" id="difficultyPicker" for="botDifficulty">
+        <span>Obtížnost bota</span>
+        <select id="botDifficulty" name="difficulty">
+          <option value="easy">Lehká</option>
+          <option value="medium" selected>Střední</option>
+          <option value="hard">Těžká</option>
+        </select>
+      </label>
+
+      <a class="start-button" id="startGame" href="pexeso.html?players=1&amp;difficulty=medium">Začít hrát <span aria-hidden="true">→</span></a>
       <p class="small-note"><span aria-hidden="true">✦</span> 30 karet · 15 dvojic</p>
     </section>
   </main>
+  <script src="theme.js"></script>
   <script src="uvodni_stranka.js"></script>
 </body>
 </html>

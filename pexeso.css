@@ -9,6 +9,7 @@
   --card: #fffefa;
 }
 * { box-sizing: border-box; }
+.theme-toggle { padding: 9px 12px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: var(--card); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
 body {
   margin: 0;
   min-height: 100vh;
@@ -214,3 +215,19 @@ footer { padding: 8px 0 10px; }
     );
   }
 }
+:root[data-theme="dark"] { color-scheme: dark; --ink: #f2f2f2; --muted: #aaa; --paper: #000; --green: #ddd; --green-dark: #f2f2f2; --line: #333; --card: #171717; }
+:root[data-theme="dark"] .game-panel, :root[data-theme="dark"] .win-panel, :root[data-theme="dark"] .pair-spotlight-panel { color: var(--ink); background: #111; border-color: #333; }
+:root[data-theme="dark"] .player-panel { background: #080808; }
+:root[data-theme="dark"] .player-score, :root[data-theme="dark"] .card-front { color: var(--ink); background: #1b1b1b; }
+:root[data-theme="dark"] .player-score.is-current { color: #fff; background: #303030; border-color: #666; box-shadow: inset 0 0 0 1px #444; }
+:root[data-theme="dark"] .player-score strong, :root[data-theme="dark"] .player-score.is-current strong { color: var(--ink); }
+:root[data-theme="dark"] .card-inner { border-color: #444; }
+:root[data-theme="dark"] .spotlight-cards img { border-color: #222; }
+:root[data-theme="dark"] .theme-toggle { color: var(--ink); background: #171717; border-color: #444; }
+:root[data-theme="dark"] .restart { color: #eee; background: #222; border-color: #444; }
+:root[data-theme="dark"] .debug-button { color: #eee; background: #222; border-color: #444; }
+:root[data-theme="dark"] .win-panel h2, :root[data-theme="dark"] .pair-spotlight-panel h2 { color: #f2f2f2; }
+:root[data-theme="dark"] .return-home, :root[data-theme="dark"] .continue-button { color: #111; background: #eee; }
+:root[data-theme="dark"] .card.is-matched .card-inner { border-color: #777; box-shadow: 0 0 0 2px #333; }
+:root[data-theme="dark"] .card:focus-visible, :root[data-theme="dark"] button:focus-visible { outline-color: #ddd; }
+:root[data-theme="dark"] .win-message, :root[data-theme="dark"] .pair-spotlight { background: #000e; }

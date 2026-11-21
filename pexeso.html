@@ -11,7 +11,7 @@
   <main class="game">
 
     <section class="intro" aria-labelledby="title">
-      <h1 id="title">placeholder nadpis</h1>
+      <h1 id="title">Pexeso</h1>
     </section>
 
     <section class="game-panel" aria-label="Memory card game">
@@ -22,6 +22,7 @@
           <div class="stat"><span class="stat-label">NALEZENÉ PÁRY</span><strong><span id="pairs">0</span><span class="stat-total"></span></strong></div>
         </div>
         <div class="toolbar-actions">
+          <button class="theme-toggle" type="button" aria-pressed="false">🌙 Tmavý režim</button>
           <button class="debug-button" id="debugPlay" type="button">Debug start</button>
           <button class="restart" id="restart" type="button"><span aria-hidden="true">↻</span> Nová hra</button>
         </div>
@@ -51,6 +52,7 @@
       </div>
     </section>
   </main>
+  <script src="theme.js"></script>
   <script src="pexeso.js"></script>
 </body>
 </html>

@@ -36,6 +36,10 @@
   const playerCount = Number.isInteger(requestedPlayers) && requestedPlayers >= 1 && requestedPlayers <= 4
     ? requestedPlayers
     : 1;
+  const hasBot = playerCount === 1;
+  const totalPlayers = hasBot ? 2 : playerCount;
+  const requestedDifficulty = new URLSearchParams(window.location.search).get("difficulty");
+  const botDifficulty = ["easy", "medium", "hard"].includes(requestedDifficulty) ? requestedDifficulty : "medium";
 
   let firstCard = null;
   let lockBoard = false;
@@ -46,16 +50,54 @@
   let mismatchTimer;
   let debugTimer;
   let debugRunning = false;
+  let botTimer;
+  const knownCards = new Map();
+
+  function playerName(index) {
+    return hasBot && index === 1 ? "Bot" : `Hráč ${index + 1}`;
+  }
+
+  function scheduleBotTurn(delay = 650) {
+    if (!hasBot || currentPlayer !== 1 || matchedPairs === imageFiles.length / 2) return;
+    window.clearTimeout(botTimer);
+    botTimer = window.setTimeout(playBotTurn, delay);
+  }
+
+  function playBotTurn() {
+    if (!hasBot || currentPlayer !== 1 || lockBoard) return;
+    const available = [...board.querySelectorAll(".card:not(.is-open):not(.is-matched)")];
+    if (available.length < 2) return;
+    let first = null;
+    const rememberPairChance = botDifficulty === "hard" ? 0.7 : botDifficulty === "medium" ? 0.2 : 0;
+    if (botDifficulty !== "easy" && Math.random() < rememberPairChance) {
+      for (const indexes of knownCards.values()) {
+        const candidates = indexes.map((index) => board.children[index]).filter((card) => card && !card.classList.contains("is-matched") && !card.classList.contains("is-open"));
+        if (candidates.length >= 2) { first = candidates.slice(0, 2); break; }
+      }
+    }
+    if (!first) {
+      const choices = available;
+      const one = choices[Math.floor(Math.random() * choices.length)];
+      const secondChoices = choices.filter((card) => card !== one);
+      const second = secondChoices[Math.floor(Math.random() * secondChoices.length)];
+      first = [one, second];
+    }
+    lockBoard = true;
+    flipCard(first[0], first[0].__cardItem, true);
+    window.setTimeout(() => {
+      flipCard(first[1], first[1].__cardItem, true);
+    }, 550);
+  }
 
   function updatePlayers() {
     turnStatus.textContent = matchedPairs === imageFiles.length / 2
       ? "Všechny karty jsou otočené. Hra skončila!"
-      : `Na tahu je hráč ${currentPlayer + 1}`;
+      : `Na tahu je ${playerName(currentPlayer)}`;
     playerScores.replaceChildren(...scores.map((score, index) => {
       const item = document.createElement("div");
       item.className = `player-score${index === currentPlayer && matchedPairs < imageFiles.length / 2 ? " is-current" : ""}`;
       item.setAttribute("aria-current", index === currentPlayer && matchedPairs < imageFiles.length / 2 ? "true" : "false");
-      item.innerHTML = `<span>Hráč ${index + 1}</span><strong>${score}</strong><span class="score-label">${score === 1 ? "pár" : "párů"}</span>`;
+      item.innerHTML = `<span>${playerName(index)}</span><strong>${score}</strong><span class="score-label">${score === 1 ? "pár" : "párů"}</span>`;
       return item;
     }));
   }
@@ -64,7 +106,7 @@
     stopDebug();
     const bestScore = Math.max(...scores);
     const winners = scores
-      .map((score, index) => score === bestScore ? `hráč ${index + 1}` : null)
+      .map((score, index) => score === bestScore ? playerName(index) : null)
       .filter(Boolean);
     winResult.textContent = `${winners.length > 1 ? "Remíza:" : "Vyhrává"} ${winners.join(" a ")} s nejvyšším počtem nalezených párů (${bestScore}).`;
     winMessage.hidden = false;
@@ -131,6 +173,8 @@
     const button = document.createElement("button");
     button.className = "card";
     button.type = "button";
+    button.dataset.prefix = item.prefix;
+    button.__cardItem = item;
     button.setAttribute("aria-label", `Card ${index + 1}, face down`);
     button.innerHTML = `
       <span class="card-inner">
@@ -141,11 +185,15 @@
     return button;
   }
 
-  function flipCard(card, item) {
-    if (lockBoard || card.classList.contains("is-open") || card.classList.contains("is-matched")) return;
+  function flipCard(card, item, fromBot = false) {
+    if ((lockBoard && !fromBot) || (hasBot && currentPlayer === 1 && !fromBot) || card.classList.contains("is-open") || card.classList.contains("is-matched")) return;
 
     card.classList.add("is-open");
     card.setAttribute("aria-label", `Picture ${item.file.replace(/\.png$/i, "").replaceAll("_", " ")}`);
+    if (!knownCards.has(item.prefix)) knownCards.set(item.prefix, []);
+    const knownIndexes = knownCards.get(item.prefix);
+    const cardIndex = [...board.children].indexOf(card);
+    if (!knownIndexes.includes(cardIndex)) knownIndexes.push(cardIndex);
 
     if (!firstCard) {
       firstCard = { element: card, item };
@@ -168,6 +216,9 @@
       updatePlayers();
       if (matchedPairs * 2 === imageFiles.length) {
         finishGame();
+      } else if (hasBot && currentPlayer === 1) {
+        lockBoard = false;
+        scheduleBotTurn(900);
       } else {
         showPair(previous.item, item);
       }
@@ -181,8 +232,9 @@
         missedCard.element.setAttribute("aria-label", "Face-down card");
       }
       lockBoard = false;
-      currentPlayer = (currentPlayer + 1) % playerCount;
+      currentPlayer = (currentPlayer + 1) % totalPlayers;
       updatePlayers();
+      scheduleBotTurn();
     }, 850);
   }
 
@@ -205,12 +257,14 @@
 
   function newGame() {
     window.clearTimeout(mismatchTimer);
+    window.clearTimeout(botTimer);
     firstCard = null;
     lockBoard = false;
     moves = 0;
     matchedPairs = 0;
-    scores = Array(playerCount).fill(0);
-    currentPlayer = Math.floor(Math.random() * playerCount);
+    scores = Array(totalPlayers).fill(0);
+    currentPlayer = 0;
+    knownCards.clear();
     movesDisplay.textContent = "0";
     pairsDisplay.textContent = "0";
     totalDisplay.textContent = ` / ${imageFiles.length / 2}`;
@@ -218,6 +272,7 @@
     pairSpotlight.hidden = true;
     updatePlayers();
     board.replaceChildren(...shuffledImages().map(createCard));
+    updatePlayers();
   }
 
   restartButton.addEventListener("click", () => {

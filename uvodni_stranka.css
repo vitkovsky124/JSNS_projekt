@@ -8,6 +8,7 @@
   --line: #e8e3da;
 }
 * { box-sizing: border-box; }
+.theme-toggle { position: fixed; z-index: 5; top: 16px; right: 16px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: #fffdfa; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
 body {
   margin: 0;
   min-height: 100vh;
@@ -46,6 +47,10 @@ h1 { margin: 0; font-size: clamp(32px, 7vw, 48px); line-height: 1.08; letter-spa
 .description { margin: 13px 0 30px; color: var(--muted); font-size: 15px; line-height: 1.6; }
 .player-picker { min-width: 0; margin: 0; padding: 0; border: 0; }
 .player-picker legend { width: 100%; margin-bottom: 13px; font-size: 14px; font-weight: 750; }
+.difficulty-picker { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 14px; margin: 18px auto 0; color: var(--ink); font-size: 13px; font-weight: 700; text-align: left; }
+.difficulty-picker[hidden] { display: none; }
+.difficulty-picker select { min-width: 145px; padding: 10px 32px 10px 12px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); background: #fffefa; font: inherit; font-weight: 500; cursor: pointer; }
+.difficulty-picker select:focus-visible { outline: 3px solid #74a782; outline-offset: 3px; }
 .player-options { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .player-option { position: relative; cursor: pointer; }
 .player-option input { position: absolute; width: 1px; height: 1px; opacity: 0; }
@@ -99,3 +104,8 @@ h1 { margin: 0; font-size: clamp(32px, 7vw, 48px); line-height: 1.08; letter-spa
   .player-label { font-size: 10px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+:root[data-theme="dark"] { color-scheme: dark; --ink: #f2f2f2; --muted: #aaa; --paper: #000; --green: #ddd; --green-dark: #f2f2f2; --line: #333; }
+:root[data-theme="dark"] .start-panel, :root[data-theme="dark"] .option-card, :root[data-theme="dark"] .theme-toggle, :root[data-theme="dark"] .difficulty-picker select { color: var(--ink); background: #111; }
+:root[data-theme="dark"] .brand-mark { color: #eee; background: #222; }
+:root[data-theme="dark"] .player-option input:checked + .option-card { color: #fff; background: #303030; }
+:root[data-theme="dark"] .player-option input:checked + .option-card .player-number { color: #fff; }
