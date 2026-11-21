@@ -5,7 +5,7 @@
 
   function updateButton() {
     const dark = document.documentElement.dataset.theme === "dark";
-    button.textContent = dark ? "☀️ Světlý režim" : "🌙 Tmavý režim";
+    button.textContent = dark ? "Světlý režim" : "Tmavý režim";
     button.setAttribute("aria-pressed", String(dark));
   }
 

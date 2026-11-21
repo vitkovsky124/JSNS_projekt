@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f8f5ef">
   <meta name="description" content="Vyber počet hráčů a zahraj si obrázkové pexeso.">
-  <title>Obrázkové pexeso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <link rel="stylesheet" href="uvodni_stranka.css">
 </head>
 <body>
-  <button class="theme-toggle" type="button" aria-pressed="false">🌙 Tmavý režim</button>
+  <button class="theme-toggle" type="button" aria-pressed="false">Tmavý režim</button>
   <main class="page">
     <section class="start-panel" aria-labelledby="title">
-      <div class="brand-mark" aria-hidden="true">✿</div>
-      <p class="eyebrow">OBRÁZKOVÉ PEXESO</p>
-      <h1 id="title">Pojďme si zahrát!</h1>
-      <p class="description">Vyber počet hráčů a připrav se hledat stejné dvojice.</p>
-
+      <h1 id="title">Pexeso</h1>
+      <br>
       <fieldset class="player-picker">
         <legend>Kolik vás bude hrát?</legend>
         <div class="player-options">
@@ -41,8 +41,6 @@
 
       <div class="player-names" id="playerNames" aria-live="polite"></div>
 
-      <div class="player-names" id="playerNames" aria-live="polite"></div>
-
       <label class="difficulty-picker" id="difficultyPicker" for="botDifficulty">
         <span>Obtížnost bota</span>
         <select id="botDifficulty" name="difficulty">
@@ -52,8 +50,7 @@
         </select>
       </label>
 
-      <a class="start-button" id="startGame" href="pexeso.html?players=1&amp;difficulty=medium">Začít hrát <span aria-hidden="true">→</span></a>
-      <p class="small-note"><span aria-hidden="true">✦</span> 30 karet · 15 dvojic</p>
+      <a class="start-button" id="startGame" href="pexeso.html?players=1&amp;difficulty=medium">Začít hrát <span class="fa-icon" aria-hidden="true">&#xf061;</span></a>
     </section>
   </main>
   <script src="theme.js"></script>
