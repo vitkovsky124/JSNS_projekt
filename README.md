@@ -1,4 +1,8 @@
 # To-do list:
-    ai design
-    font
+
+    animace
+    rozložení karet (zobrazení po prvním rozkliknutí)
+    lepší design
+    případně nastavení
+
     !!! check kyberbezpečnosti
