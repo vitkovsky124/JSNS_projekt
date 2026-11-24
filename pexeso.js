@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const imageFolder = "images/Small/";
   const imageFiles = [
     "Afghanske_divky_bio.png", "Afghanske_divky_cit.png",
@@ -182,9 +182,6 @@
       updatePlayers();
       if (matchedPairs * 2 === imageFiles.length) {
         finishGame();
-      } else if (hasBot && currentPlayer === 1) {
-        lockBoard = false;
-        scheduleBotTurn(900);
       } else {
         showPair(previous.item, item);
       }
@@ -219,6 +216,7 @@
   function continueGame() {
     pairSpotlight.hidden = true;
     lockBoard = false;
+    scheduleBotTurn();
   }
 
   function newGame() {
